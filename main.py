@@ -1,17 +1,32 @@
-from os import access
+from selenium.webdriver.chrome.service import Service
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from func.weibo import weiboClient
+from func.postWeibo import Weibo
+from func.getCookie import Cookie
 from func.getPoem import getPoem
 
 def every_day_nine():
+    # 存储名称
+    name = ''
     # 获取poem
     poem = getPoem().do()
     print(poem)
-    # 获取access_token
-    access_token = open('data/access_token.txt', 'r').read()
-    # 发送微博
-    weiboClient().post(poem, access_token)
+    # 获取service
+    path = r'driver/chromedriver.exe'  # 指定驱动存放目录
+    ser = Service(path)
+    # 获取cookies
+    try:
+        cookies = Cookie().read_cookies()
+    except:
+        Cookie().get_cookies(ser)
+        sched.shutdown()
+    # 验证cookies是否有效
+    if Cookie().check_cookies(name):
+        # 发送微博
+        Weibo().run(ser, poem, cookies)
+    else:
+        sched.shutdown()
+
     
 # 测试调用一次
 
