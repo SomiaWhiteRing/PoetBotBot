@@ -5,7 +5,7 @@ from func.postWeibo import Weibo
 from func.getCookie import Cookie
 from func.getPoem import getPoem
 
-def every_day_nine():
+def post_poem():
     # 存储名称
     name = ''
     # 获取poem
@@ -30,13 +30,13 @@ def every_day_nine():
     
 # 测试调用一次
 
-every_day_nine()
+post_poem()
     
 # 选择BlockingScheduler调度器
 sched = BlockingScheduler(timezone='Asia/Shanghai')
 
-# job_every_nine 每秒执行一次
-sched.add_job(every_day_nine, 'interval', seconds=1000)
+# post_poem 每小时的第0分钟执行一次
+sched.add_job(post_poem, 'cron', hour='*', minute='0')
 
 # 启动定时任务
 sched.start()
