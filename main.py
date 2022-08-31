@@ -25,7 +25,7 @@ def post_poem():
         except:
             pass
     # 验证cookies是否有效
-    if Cookie().check_cookies(config['weiboName'], config['sendKey']):
+    if Cookie().check_cookies(config['weiboName'] if config['weiboName'] else '', config['sendKey']):
         # 发送微博
         Weibo().run(ser, poem, cookies, config['oldWeibo'])
     else:
