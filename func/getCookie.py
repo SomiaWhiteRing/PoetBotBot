@@ -41,7 +41,7 @@ class Cookie():
         return cookies
 
     # 检测cookies的有效性
-    def check_cookies(self, name, SendKey=None):
+    def check_cookies(self, name="", SendKey=None):
         # 读取本地cookies
         cookies = self.read_cookies()
         s = requests.Session()
@@ -49,11 +49,11 @@ class Cookie():
             s.cookies.set(cookie['name'], cookie['value'])
         response = s.get("https://weibo.com")
         html_t = response.text
-        # 检测页面是否包含我的微博用户名
+        # 检测页面是否包含微博用户名
         if name in html_t:
             return True
         else:
             if SendKey:
-                requests.post('https://sctapi.ftqq.com/' + SendKey, data={'title': '微博登录失败', 'desp': '快开服务器重新扫码登录'})
+                requests.post('https://sctapi.ftqq.com/' + SendKey, data={'title': '微博登录失败'})
             self.get_cookies()
             return False

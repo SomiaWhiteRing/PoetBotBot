@@ -1,13 +1,14 @@
 from selenium.webdriver.chrome.service import Service
 from apscheduler.schedulers.blocking import BlockingScheduler
+import yaml
 
 from func.postWeibo import Weibo
 from func.getCookie import Cookie
 from func.getPoem import getPoem
 
 def post_poem():
-    # 存储名称
-    name = ''
+    # 获取配置
+    config = yaml.load(open('config.yaml', 'r', encoding='utf-8').read(),Loader=yaml.FullLoader)
     # 获取poem
     poem = getPoem().do()
     print(poem)
@@ -24,9 +25,9 @@ def post_poem():
         except:
             pass
     # 验证cookies是否有效
-    if Cookie().check_cookies(name):
+    if Cookie().check_cookies(config['weiboName'], config['sendKey']):
         # 发送微博
-        Weibo().run(ser, poem, cookies)
+        Weibo().run(ser, poem, cookies, config['oldWeibo'])
     else:
         try:
             sched.shutdown()

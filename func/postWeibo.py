@@ -22,22 +22,28 @@ class Weibo():
         print('cookies已添加！')
 
     # 发布微博
-    def post_weibo(self, driver, content):
+    def post_weibo(self, driver, content, oldWeibo):
         driver.minimize_window()
         time.sleep(10)
         driver.refresh()
         driver.maximize_window()
         time.sleep(5)
-        weibo_content = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[1]/div/textarea')
+        if oldWeibo:
+            weibo_content = driver.find_element("xpath", '//*[@id="v6_pl_content_publishertop"]/div/div[2]/textarea')
+        else:
+            weibo_content = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[1]/div/textarea')
         weibo_content.send_keys(content)
         time.sleep(5)
-        bt_push = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[4]/div/div[5]/button')
+        if oldWeibo:
+            bt_push = driver.find_element("xpath", '//*[@id="v6_pl_content_publishertop"]/div/div[3]/div[1]/a')
+        else:
+            bt_push = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[4]/div/div[5]/button')
         bt_push.click()  # 点击发布
         time.sleep(5)
         driver.close()  # 关闭浏览器
 
     # 集成操作
-    def run(self, ser, content, cookies):
+    def run(self, ser, content, cookies, oldWeibo=False):
         driver = self.init_browser(ser)
         self.login_weibo(driver, cookies)
-        self.post_weibo(driver, content)
+        self.post_weibo(driver, content, oldWeibo)
