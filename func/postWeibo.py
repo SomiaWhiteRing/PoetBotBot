@@ -18,16 +18,19 @@ class Weibo():
         driver.refresh()  # 刷新网页
         for cookie in cookies:
             driver.add_cookie(cookie)
+            print(cookie)
         print('cookies已添加！')
 
     # 发布微博
     def post_weibo(self, driver, content):
+        driver.minimize_window()
         time.sleep(10)
         driver.refresh()
-        time.sleep(3)
+        driver.maximize_window()
+        time.sleep(5)
         weibo_content = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[1]/div/textarea')
         weibo_content.send_keys(content)
-        time.sleep(2)
+        time.sleep(5)
         bt_push = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[4]/div/div[5]/button')
         bt_push.click()  # 点击发布
         time.sleep(5)
