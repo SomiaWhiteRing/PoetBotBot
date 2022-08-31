@@ -19,13 +19,19 @@ def post_poem():
         cookies = Cookie().read_cookies()
     except:
         Cookie().get_cookies(ser)
-        sched.shutdown()
+        try:
+            sched.shutdown()
+        except:
+            pass
     # 验证cookies是否有效
     if Cookie().check_cookies(name):
         # 发送微博
         Weibo().run(ser, poem, cookies)
     else:
-        sched.shutdown()
+        try:
+            sched.shutdown()
+        except:
+            pass
 
     
 # 测试调用一次
