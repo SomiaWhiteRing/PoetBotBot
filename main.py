@@ -1,43 +1,35 @@
 from selenium.webdriver.chrome.service import Service
 from apscheduler.schedulers.blocking import BlockingScheduler
 import yaml
+import requests
 
 from func.postWeibo import Weibo
-from func.getCookie import Cookie
 from func.getPoem import getPoem
 
 def post_poem():
     # 获取配置
     config = yaml.load(open('config.yaml', 'r', encoding='utf-8').read(),Loader=yaml.FullLoader)
-    # 获取poem
-    poem = getPoem().do()
-    print(poem)
+    try:
+        # 获取poem
+        poem = getPoem().do()
+        print(poem)
+        # 发送微博
+        Weibo().post_weibo(driver, poem, config['oldWeibo'])
+    except Exception as e:
+        print(e)
+        if config['sendKey']:
+            requests.post('https://sctapi.ftqq.com/' + config['sendKey'], data={'title': e})
+
+def login():
     # 获取service
     path = r'driver/chromedriver.exe'  # 指定驱动存放目录
     ser = Service(path)
-    # 获取cookies
-    try:
-        cookies = Cookie().read_cookies()
-    except:
-        Cookie().get_cookies(ser)
-        try:
-            sched.shutdown()
-        except:
-            pass
-    # 验证cookies是否有效
-    if Cookie().check_cookies(config['weiboName'] if config['weiboName'] else '', config['sendKey']):
-        # 发送微博
-        Weibo().run(ser, poem, cookies, config['oldWeibo'])
-    else:
-        try:
-            sched.shutdown()
-        except:
-            pass
-
+    # 登录
+    return Weibo().init_browser(ser)
     
-# 测试调用一次
+# 登录微博
 
-post_poem()
+driver = login()
     
 # 选择BlockingScheduler调度器
 sched = BlockingScheduler(timezone='Asia/Shanghai')

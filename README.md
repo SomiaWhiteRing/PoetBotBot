@@ -13,7 +13,7 @@
 
 1. 下载运行环境Chrome对应版本的[chromedriver](https://chromedriver.chromium.org/downloads)，放置在`/driver`目录下
 2. 在程序目录下执行`pip install -r requirements.txt`，安装所需的依赖。
-3. （可选）在`config.yaml`中配置微博名称`"weiboName"`与[Server酱](https://sct.ftqq.com/)的SendKey`"sendKey"`，配置后会在cookie失效时自动发送通知。
+3. （可选）在`config.yaml`中配置[Server酱](https://sct.ftqq.com/)的SendKey`"sendKey"`，配置后会在发生错误时自动发送通知。
 
 ## 启动
 
@@ -21,7 +21,9 @@
 python main.py
 ```
 
-初次启动或cookie失效时，需要进行一次扫码登录。
+~~初次启动或cookie失效时，需要进行一次扫码登录。~~
+
+由于新浪的cookie存在一天的时间限制，现在需要每次启动时都进行一次扫码登录并且浏览器会保持在后台运行。启动后请勿关闭浏览器。
 
 推荐使用新版微博，若需使用旧版微博，请将`config.yaml`中的`"oldWeibo"`配置为`true`。
 
