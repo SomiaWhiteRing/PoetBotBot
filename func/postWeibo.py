@@ -9,6 +9,11 @@ class Weibo():
         # 把允许提示这个弹窗关闭
         prefs = {"profile.default_content_setting_values.notifications": 2}
         chrome_options.add_experimental_option("prefs", prefs)
+        # 设置为开发者模式，避免被识别出来使用了Selenium
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        # 屏蔽烦人的ssl错误
+        chrome_options.add_argument('--ignore-certificate-errors')
+        chrome_options.add_argument('--ignore-ssl-errors')
         driver = webdriver.Chrome(service=ser, options=chrome_options)
         driver.get('https://weibo.com/login.php')
         input('请登录微博，登录后按回车继续')
