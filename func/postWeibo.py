@@ -21,7 +21,7 @@ class Weibo():
         attempts = 0
         success = False
         tryNum = 5
-        while attempts < tryNum or not success:
+        while attempts < tryNum and not success:
             try:
                 driver.refresh()
                 time.sleep(10)
