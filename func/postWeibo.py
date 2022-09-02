@@ -18,18 +18,28 @@ class Weibo():
     # 发布微博
     def post_weibo(self, driver, content, oldWeibo):
         driver.maximize_window()
-        driver.refresh()
-        time.sleep(10)
-        if oldWeibo:
-            weibo_content = driver.find_element("xpath", '//*[@id="v6_pl_content_publishertop"]/div/div[2]/textarea')
-        else:
-            weibo_content = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[1]/div/textarea')
-        weibo_content.send_keys(content)
-        time.sleep(5)
-        if oldWeibo:
-            bt_push = driver.find_element("xpath", '//*[@id="v6_pl_content_publishertop"]/div/div[3]/div[1]/a')
-        else:
-            bt_push = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[4]/div/div[5]/button')
-        bt_push.click()  # 点击发布
+        attempts = 0
+        success = False
+        tryNum = 5
+        while attempts < tryNum or not success:
+            try:
+                driver.refresh()
+                time.sleep(10)
+                if oldWeibo:
+                    weibo_content = driver.find_element("xpath", '//*[@id="v6_pl_content_publishertop"]/div/div[2]/textarea')
+                else:
+                    weibo_content = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[1]/div/textarea')
+                weibo_content.send_keys(content)
+                time.sleep(5)
+                if oldWeibo:
+                    bt_push = driver.find_element("xpath", '//*[@id="v6_pl_content_publishertop"]/div/div[3]/div[1]/a')
+                else:
+                    bt_push = driver.find_element("xpath", '//*[@id="homeWrap"]/div[1]/div/div[4]/div/div[5]/button')
+                bt_push.click()  # 点击发布
+                success = True
+            except:
+                attempts += 1
+                if attempts == tryNum:
+                    raise Exception
         time.sleep(5)
         driver.minimize_window()
