@@ -2,11 +2,14 @@ from selenium.webdriver.chrome.service import Service
 from apscheduler.schedulers.blocking import BlockingScheduler
 import yaml
 import requests
+import os
 
 from func.postWeibo import Weibo
 from func.getPoem import getPoem
 
 def post_poem():
+    # 清除显示
+    os.system('cls')
     # 获取配置
     config = yaml.load(open('config.yaml', 'r', encoding='utf-8').read(),Loader=yaml.FullLoader)
     try:
@@ -15,6 +18,7 @@ def post_poem():
         print(poem)
         # 发送微博
         Weibo().post_weibo(driver, poem, config['oldWeibo'])
+        print('发送成功')
     except Exception as e:
         print(e)
         if config['sendKey']:
@@ -28,9 +32,13 @@ def login():
     return Weibo().init_browser(ser)
     
 # 登录微博
-
 driver = login()
-    
+
+print("开始运行了")
+
+# 测试是否正常可用
+# post_poem()
+
 # 选择BlockingScheduler调度器
 sched = BlockingScheduler(timezone='Asia/Shanghai')
 
